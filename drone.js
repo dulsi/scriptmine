@@ -1,3 +1,18 @@
+Duktape.modSearch = function (id)
+{
+ var res;
+
+ print('loading module:', id);
+
+ res = readFile(id);
+ if (typeof res === 'string')
+ {
+  return res;
+ }
+
+ throw new Error('module not found: ' + id);
+}
+
 function box()
 {
  var d = new Drone();
