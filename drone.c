@@ -15,7 +15,7 @@ duk_ret_t drone_box(duk_context *ctx)
  duk_get_prop_string(ctx, -1, "facing");
  int facing = duk_to_int(ctx, -1);
  duk_remove(ctx, -1);
- int blockID = duk_to_int(ctx, -5);
+ const char *blockID = duk_to_string(ctx, -5);
  int w = duk_to_int(ctx, -4);
  int h = duk_to_int(ctx, -3);
  int d = duk_to_int(ctx, -2);
@@ -35,6 +35,83 @@ duk_ret_t drone_box(duk_context *ctx)
   {
    for (int changeD = 0; changeD < d; changeD++)
    {
+    lua_pushvalue(Lg, -1);  // [set_node set_node]
+    lua_newtable(Lg);
+    int fx = x;
+    int fz = z;
+    switch (facing)
+    {
+     case 0:
+      fx -= changeD;
+      fz += changeW;
+      break;
+     case 1:
+      fz += changeD;
+      fx += changeW;
+      break;
+     case 2:
+      fx += changeD;
+      fz -= changeW;
+      break;
+     case 3:
+      fz -= changeD;
+      fx -= changeW;
+      break;
+    };
+    lua_pushnumber(Lg, fx);
+    lua_setfield(Lg, -2, "x");
+    lua_pushnumber(Lg, y + changeH);
+    lua_setfield(Lg, -2, "y");
+    lua_pushnumber(Lg, fz);
+    lua_setfield(Lg, -2, "z");
+    lua_newtable(Lg);
+    lua_pushstring(Lg, nodeName);
+    lua_setfield(Lg, -2, "name");
+    lua_call(Lg, 2, 0);
+   }
+  }
+ }
+ lua_remove(Lg, -1);
+ return 0;
+}
+
+duk_ret_t drone_box0(duk_context *ctx)
+{
+ duk_push_this(ctx); // [b w h d this]
+ duk_get_prop_string(ctx, -1, "x");
+ int x = duk_to_int(ctx, -1);
+ duk_remove(ctx, -1);
+ duk_get_prop_string(ctx, -1, "y");
+ int y = duk_to_int(ctx, -1);
+ duk_remove(ctx, -1);
+ duk_get_prop_string(ctx, -1, "z");
+ int z = duk_to_int(ctx, -1);
+ duk_remove(ctx, -1);
+ duk_get_prop_string(ctx, -1, "facing");
+ int facing = duk_to_int(ctx, -1);
+ duk_remove(ctx, -1);
+ const char *blockID = duk_to_string(ctx, -5);
+ int w = duk_to_int(ctx, -4);
+ int h = duk_to_int(ctx, -3);
+ int d = duk_to_int(ctx, -2);
+ if (w < 1)
+  w = 1;
+ if (h < 1)
+  h = 1;
+ if (d < 1)
+  d = 1;
+ const char *nodeName = blockID_to_node_name(blockID);
+ lua_getfield(Lg, LUA_GLOBALSINDEX, "minetest");  // [minetest]
+ lua_getfield(Lg, -1, "set_node");  // [minetest new_node]
+ lua_remove(Lg, -2);  // [set_node]
+ for (int changeW = 0; changeW < w; changeW++)
+ {
+  for (int changeH = 0; changeH < h; changeH++)
+  {
+   for (int changeD = 0; changeD < d; changeD++)
+   {
+    if ((changeW != 0) && (changeW != w - 1) && (changeD != 0) && (changeD != d - 1))
+     continue;
     lua_pushvalue(Lg, -1);  // [set_node set_node]
     lua_newtable(Lg);
     int fx = x;
@@ -162,6 +239,8 @@ void drone_init(duk_context *ctx)
  duk_push_object(ctx);
  duk_push_c_function(ctx, drone_box, 4);
  duk_put_prop_string(ctx, -2, "box");
+ duk_push_c_function(ctx, drone_box0, 4);
+ duk_put_prop_string(ctx, -2, "box0");
  duk_put_prop_string(ctx, -2, "prototype");
  duk_put_global_string(ctx, "Drone");
 }

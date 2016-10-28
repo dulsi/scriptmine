@@ -6,5 +6,5 @@
 extern lua_State *Lg;
 extern const char *name;
 
-extern const char *blockID_to_node_name(int blockID);
+extern const char *blockID_to_node_name(const char *blockID);
 extern void drone_init(duk_context *ctx);
