@@ -633,14 +633,14 @@ Drone.prototype.cuboida = function(/* Array */ blocks, w, h, d, overwrite) {
   for ( ; i < len; i++ ) {
     blocksForBuild[i] = this.getBlockIdAndMeta( blocksForBuild[ i ] );
   }
-  this.then(function(){
+//  this.then(function(){
     var bi = 0;
     traverseDHW( this, d,h,w, function traverseWidthCallback( ) { 
       var properBlock = blocksForBuild[ bi % len ];
       this.setBlock(properBlock[0], properBlock[1]);
       bi++;
     });
-  });
+//  });
   return this;
 };
 Drone.MAX_VOLUME = 1 * MILLION;

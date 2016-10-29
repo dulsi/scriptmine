@@ -1,4 +1,5 @@
 #include "scriptmine.h"
+#include <dirent.h>
 
 duk_context *ctx = NULL;
 lua_State *Lg = NULL;
@@ -39,8 +40,15 @@ const char *stone_brick_stairs = "stairs:stair_stonebrick";
 const char *white_wool = "wool:white";
 const char *yellow_wool = "wool:yellow";
 
-const char *blockID_to_node_name(const char *blockID)
+const char *blockID_to_node_name(const char *blockIDOrig)
 {
+ char blockID[255];
+ size_t len = strlen(blockIDOrig);
+ if (len > 254)
+  return air;
+ strcpy(blockID, blockIDOrig);
+ if ((len > 2) && (strcmp(blockIDOrig + len - 2, ":0") == 0))
+  blockID[len - 2] = 0;
  if (strcmp(blockID, "1") == 0)
   return stone;
  else if (strcmp(blockID, "2") == 0)
@@ -257,6 +265,53 @@ static int javascript(lua_State *L)
  return 1;
 }
 
+static void loadplugins(const char *modpath, const char *pluginpath)
+{
+ char fullpath[2048];
+ strcpy(fullpath, modpath);
+ strcat(fullpath, "/");
+ strcat(fullpath, pluginpath);
+ DIR *dir = opendir(fullpath);
+ if (dir)
+ {
+  struct dirent *entry;
+  while ((entry = readdir(dir)) != NULL)
+  {
+   if (entry->d_type & DT_DIR)
+   {
+    if ((strcmp("..", entry->d_name) != 0) && (strcmp(".", entry->d_name) != 0))
+    {
+     char *tmppath = malloc(strlen(pluginpath) + 2 + strlen(entry->d_name));
+     strcpy(tmppath, pluginpath);
+     strcat(tmppath, "/");
+     strcat(tmppath, entry->d_name);
+     loadplugins(modpath, tmppath);
+     free(tmppath);
+    }
+   }
+   else
+   {
+    int len = strlen(entry->d_name);
+    if ((len > 3) && (strcmp(entry->d_name + len - 3, ".js") == 0))
+    {
+     char *tmppath = malloc(strlen(pluginpath) + 2 + len);
+     strcpy(tmppath, pluginpath);
+     strcat(tmppath, "/");
+     strcat(tmppath, entry->d_name);
+     tmppath[strlen(pluginpath) + 1 + len - 3] = 0;
+     duk_push_global_object(ctx);
+     duk_push_string(ctx, "require");
+     duk_get_prop(ctx, -2);
+     duk_push_string(ctx, tmppath);
+     duk_call(ctx, 1);
+     duk_pop_n(ctx, 2);
+     free(tmppath);
+    }
+   }
+  }
+ }
+}
+
 static int loadscript(lua_State *L)
 {
  const char *modpath = lua_tostring(L, -1);
@@ -267,6 +322,9 @@ static int loadscript(lua_State *L)
   printf("Error: %s\n", duk_safe_to_string(ctx, -1));
   exit(1);
  }
+ strcpy(fullpath, modpath);
+ strcat(fullpath, "/js");
+ loadplugins(fullpath, "plugins");
  free(fullpath);
  return 1;
 }
