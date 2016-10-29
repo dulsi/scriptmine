@@ -741,7 +741,7 @@ Drone.PLAYER_TORCH_FACING = [ 2, 4, 1, 3 ];
 
 Drone.extend('box', Drone.prototype.cuboid );
 Drone.extend('box0',Drone.prototype.cuboid0 );
-//Drone.extend('boxa',Drone.prototype.cuboida );
+Drone.extend('boxa',Drone.prototype.cuboida );
 //
 // show the Drone's position and direction 
 //

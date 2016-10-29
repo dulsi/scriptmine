@@ -23,6 +23,7 @@ const char *lime_wool = "wool:green";
 const char *magenta_wool = "wool:magenta";
 const char *oakwood_plank = "default:wood";
 const char *oak_wood = "default:tree";
+const char *oak_wood_slab = "stairs:slab_wood";
 const char *orange_wool = "wool:orange";
 const char *pink_wool = "wool:pink";
 const char *purple_wool = "wool:violet";
@@ -33,6 +34,8 @@ const char *sprucewood_plank = "default:pine_wood";
 const char *spruce_wood = "default:pine_tree";
 const char *spruce_wood_stairs = "stairs:stair_pine_wood";
 const char *stone = "default:stone";
+const char *stone_brick = "default:stonebrick";
+const char *stone_brick_stairs = "stairs:stair_stonebrick";
 const char *white_wool = "wool:white";
 const char *yellow_wool = "wool:yellow";
 
@@ -92,8 +95,14 @@ const char *blockID_to_node_name(const char *blockID)
   return gold_block;
  else if (strcmp(blockID, "57") == 0)
   return gold_block;
+ else if (strcmp(blockID, "98") == 0)
+  return stone_brick;
  else if (strcmp(blockID, "102") == 0)
   return glass_pane;
+ else if (strcmp(blockID, "109") == 0)
+  return stone_brick_stairs;
+ else if (strcmp(blockID, "126") == 0)
+  return oak_wood_slab;
  else if (strcmp(blockID, "134") == 0)
   return spruce_wood_stairs;
  else if (strcmp(blockID, "188") == 0)
