@@ -21,6 +21,7 @@ const char *blockIDToNodeName[][2] =
  {"15", "default:stone_with_iron"},
  {"17", "default:tree"},
  {"17:1", "default:pine_tree"},
+ {"31", "default:grass_1"},
  {"35", "wool:white"},
  {"35:1", "wool:orange"},
  {"35:2", "wool:magenta"},
@@ -34,7 +35,12 @@ const char *blockIDToNodeName[][2] =
  {"35:13", "wool:dark_green"},
  {"35:14", "wool:red"},
  {"35:15", "wool:black"},
+ {"37", "flowers:dandelion_yellow"},
+ {"38", "flowers:rose"},
  {"41", "default:goldblock"},
+ {"48", "default:mossycobble"},
+ {"49", "default:obsidian"},
+ {"50", "default:torch"},
  {"57", "default:diamondblock"},
  {"64", "doors:door_wood"},
  {"65", "default:ladder_wood"},
@@ -135,9 +141,7 @@ printf("get_node\n");
  lua_call(Lg, 1, 0);
  lua_getfield(Lg, -1, "name");
  const char *node_name = lua_tostring(Lg, -1);
-printf("get_node %s\n", node_name);
  const char *blockID = node_name_to_blockID(node_name);
-printf("get_node %s\n", blockID);
  duk_idx_t ary_indx = duk_push_array(ctx);
  duk_push_string(ctx, blockID);
  duk_put_prop_string(ctx, ary_indx, "typeId");
