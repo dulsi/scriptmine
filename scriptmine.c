@@ -124,7 +124,6 @@ duk_ret_t readFile(duk_context *ctx)
 
 duk_ret_t get_node(duk_context *ctx)
 {
-printf("get_node\n");
  int z = duk_to_int(ctx, -3);
  int y = duk_to_int(ctx, -2);
  int x = duk_to_int(ctx, -1);
