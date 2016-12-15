@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Minetest:JS
+GenericName=Minetest:JS
+Comment=Multiplayer infinite-world block sandbox
+Exec=minetest_with_js
+Icon=minetest
+Terminal=false
+Type=Application
+Categories=Game;
+StartupNotify=false
+X-Desktop-File-Install-Version=0.22
