@@ -1,0 +1,2 @@
+Allows javascript functions to run within the game.
+Users can use /js to run javascript functions just like scriptcraft. Only a subset of the blocks and functions from scriptcraft are available.
