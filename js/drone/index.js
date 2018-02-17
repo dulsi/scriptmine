@@ -553,8 +553,10 @@ Drone.prototype.times = function( numTimes, commands ) {
 
 
 Drone.prototype.getBlock = function(){
-  return undefined; //this.world.getBlockAt(this.x,this.y,this.z);
+  var bl = get_node(this.x,this.y,this.z);
+  return new smBlock(bl.typeId, bl.nodeName);
 };
+
 Drone.prototype.setBlock = function(blockType, data, ow, oh, od, update){
   if (typeof ow == 'undefined')
     ow = 0;
@@ -706,7 +708,7 @@ Drone.prototype.then = function( next ){
     thisNext();
     this.move(chkNow);
   }
-  getQueue(this).push( wrapperFn.bind(this) );    
+  getQueue(this).push( wrapperFn.bind(this) );
   return this;
 };
 Drone.prototype.cuboid = function( block, w, h, d, immediate ) {

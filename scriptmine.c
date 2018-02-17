@@ -15,6 +15,10 @@ const char *blockIDToNodeName[][2] =
  {"4", "default:cobble"},
  {"5", "default:wood"},
  {"5:1", "default:pine_wood"},
+ {"8", "default:water_source"},
+ {"9", "default:water_source"},
+ {"10", "default:lava_source"},
+ {"11", "default:lava_source"},
  {"12", "default:sand"},
  {"13", "default:gravel"},
  {"14", "default:stone_with_gold"},
@@ -137,7 +141,7 @@ duk_ret_t get_node(duk_context *ctx)
  lua_setfield(Lg, -2, "y");
  lua_pushnumber(Lg, z);
  lua_setfield(Lg, -2, "z");
- lua_call(Lg, 1, 0);
+ lua_call(Lg, 1, 1);
  lua_getfield(Lg, -1, "name");
  const char *node_name = lua_tostring(Lg, -1);
  const char *blockID = node_name_to_blockID(node_name);
@@ -172,7 +176,7 @@ duk_ret_t place_node(duk_context *ctx)
  lua_pushstring(Lg, nodeName);
  lua_setfield(Lg, -2, "name");
  lua_call(Lg, 2, 0);
- return 1;
+ return 0;
 }
 
 duk_ret_t set_node(duk_context *ctx)
@@ -196,7 +200,7 @@ duk_ret_t set_node(duk_context *ctx)
  lua_pushstring(Lg, nodeName);
  lua_setfield(Lg, -2, "name");
  lua_call(Lg, 2, 0);
- return 1;
+ return 0;
 }
 
 duk_ret_t get_player_location(duk_context *ctx)

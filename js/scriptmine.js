@@ -13,6 +13,13 @@ Duktape.modSearch = function (id)
  throw new Error('module not found: ' + id);
 }
 
+function smBlock(typeId, nodeName)
+{
+ this.typeId = typeId;
+ this.nodeName = nodeName;
+ return this;
+}
+
 var global = this;
 var blocks = require("blocks");
 var Drone = require("drone");
